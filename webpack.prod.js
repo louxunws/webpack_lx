@@ -4,7 +4,15 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')                         // css文件指纹
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')    // css文件压缩
 const HtmlWebpackPlugin = require('html-webpack-plugin')                                // html文件压缩
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')                          // 清除构建目录    
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')                          // 清除构建目录  
+
+/*
+   css内联
+   html-inline-css-webpack-plugin 和 mini-css-extract-plugin配合使用, 
+   mini-css-extract-plugin将css提取成css文件, html-inline-css-webpack-plugin将这个文件内联进header标签内
+*/
+const HTMLInlineCssWebpackPlugin = require('html-inline-css-webpack-plugin').default  
+
 
 module.exports = {
     entry: './src/index.js',
@@ -22,19 +30,26 @@ module.exports = {
             {
                 test: /\.less$/,
                 use: [
-                    MiniCssExtractPlugin.loader,  // style-loader最终会将样式插入到header中不会生成css文件, 要使用这个loader
+                    MiniCssExtractPlugin.loader,                      // 会将css提取成一个文件
                     "css-loader",
                     "less-loader",
                     {
-                        loader: 'postcss-loader',
+                        loader: 'postcss-loader',                           // autoprefixer添加前缀需要配合postcss-loader使用
                         options: {
                             plugins: ()=> [
-                                require('autoprefixer')({
+                                require('autoprefixer')({                   // 自动添加c3前缀
                                     overrideBrowserslis: ['last 2 version', '>1%', 'ios 7']
                                 })
                             ]
                         }
-                    }
+                    },
+                    {
+                        loader: 'px2rem-loader',                // 将px自动转rem
+                        options: {
+                            remUnit: 75,                        // 1rem = 75px  转换比例
+                            remPrecision: 8                     // 转化后小数点保留位数
+                        }
+                    },
                 ]
             },
             {
@@ -72,6 +87,8 @@ module.exports = {
                 removeComments: false
             }
         }),
-        new CleanWebpackPlugin()
+        new CleanWebpackPlugin(),
+        /* HTMLInlineCssWebpackPlugin 需要放在 HtmlWebpackPlugin 后面 */
+        new HTMLInlineCssWebpackPlugin()
     ]
 }

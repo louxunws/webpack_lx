@@ -3,7 +3,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')                                // html文件压缩
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')                          // 清除构建目录  
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')                          // 清除构建目录 
 
 module.exports = {
     entry: './src/index.js',
@@ -23,7 +23,14 @@ module.exports = {
                 use: [
                     "style-loader",
                     "css-loader",
-                    "less-loader"
+                    "less-loader",
+                    {
+                        loader: 'px2rem-loader',
+                        options: {
+                            remUnit: 75,                        // 1rem = 75px  转换比例
+                            remPrecision: 8                     // 转化后小数点保留位数
+                        }
+                    }
                 ]
             },
             {
