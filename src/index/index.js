@@ -1,6 +1,5 @@
 import React from 'react'
-import reactDom from 'react-dom'
-import Search from './search.js'
+import ReactDom from 'react-dom'
 
 class Index extends React.Component{
     constructor(props) {
@@ -9,12 +8,12 @@ class Index extends React.Component{
 
     render() {
         return(
-            <Search></Search>
+            <div>首页</div>
         )
     }
 }
 
-reactDom.render(
+ReactDom.render(
     <Index/>,
     document.getElementById('root')
 )

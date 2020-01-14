@@ -1,5 +1,6 @@
 import React from 'react'
-import logo from './images/logo.png'
+import ReactDom from 'react-dom'
+import logo from '../images/logo.png'
 import './search.less'
 
 class Search extends React.Component{
@@ -11,10 +12,13 @@ class Search extends React.Component{
         return(
             <>
                 <img src={ logo }></img>
-                <div className='search'>woshi Search jiajia000</div>
+                <div>search页面</div>
             </>
         )
     }
 }
 
-export default Search
+ReactDom.render(
+    <Search/>,
+    document.getElementById('root')
+)
